@@ -5,7 +5,9 @@
     </div> -->
     <Swiper />
     <div class="cards">
-      <Card v-for="n in 20" />
+      <template v-for="(product, index) in productsArr" :key="index">
+        <Card :product="product" />          
+      </template>
     </div>
 
   </div>
@@ -16,14 +18,25 @@ import { defineComponent } from 'vue';
 import Swiper from '@/components/Swiper.vue';
 
 import Card from '@/components/Card.vue';
-import NavHome from '@/components/HomePage/NavHome.vue';
-
-
 
 export default defineComponent({
   name: 'HomeView',
   components: {
-    Card, NavHome, Swiper
+    Card, Swiper
+  },
+  async mounted() {
+    await this.$store.dispatch("fetchAllProducts");
+  },
+  methods: {
+    addToBasketFunc(product: any) {
+      this.$store.dispatch("addToBasket", product)
+    },
+
+  },
+  computed: {
+    productsArr(): any {
+      return this.$store.state.ProductState.allProducts
+    }
   },
 });
 </script>

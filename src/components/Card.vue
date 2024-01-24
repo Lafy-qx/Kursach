@@ -1,14 +1,15 @@
 <!-- JS -->
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'Card',
   components: {
-  }, 
-  data() {
-    return {
-      img : ''
+  },
+  props: {
+    product: {
+      type: Object,
+      required: true
     }
   },
 });
@@ -18,7 +19,7 @@ export default defineComponent({
   <router-link to="/DetailedCard">
     <div class="card">
       <div class="card__img">
-        <img src="" alt="">12
+        <img :src="`/aseets/${product.image}`" alt="">
         <button class="card__buttonCard-cart"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
             viewBox="0 0 24 24" fill="none">
             <path
@@ -26,11 +27,12 @@ export default defineComponent({
               fill="#F1F8FF" />
           </svg></button>
       </div>
-      <div class="card__price">200$</div>
-      <div class="card__title">НАЗВАНИЕ КАРТОЧКИ</div>
+      <div class="card__price">{{ product.price }}$</div>
+      <div class="card__title">{{ product.title }}</div>
       <div class="card__blockRating">
-        <v-rating class="card__blockRating-star"  :length="5" :size="30" :model-value="2.5" half-increments />
-        <div class="card__blockRating-count">кол-во</div>
+        <v-rating class="card__blockRating-star" :length="5" :size="30" :model-value="product.countRating"
+          half-increments />
+        <div class="card__blockRating-count">{{ product.in_stock }}</div>
       </div>
 
     </div>
