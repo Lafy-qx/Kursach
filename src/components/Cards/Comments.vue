@@ -1,25 +1,20 @@
 <template>
   <div class="commentsBlock">
     <div class="commentsBlock__formComments">
-      <!-- <div class="commentsBlock__formComments__form">
-        <label for="">Имя:<br><input type="text" class="commentsBlock__formComments__form-input"></label>
-        <label for="">Email:<br><input type="text" class="commentsBlock__formComments__form-input"></label>
-      </div> -->
+
       <div class="commentsBlock__formComments__textarea">
         <div class="commentsBlock__formComments__textarea__block">
           Комментарий: <br>
           <textarea name="" id="" cols="60" rows="5"></textarea>
+          <v-rating class="commentsBlock__formComments__textarea__block-star" hover :length="5" size="x-large"
+            :model-value="3" />
           <button>отправить</button>
 
         </div>
       </div>
-
-
-
     </div>
     <div class="commentsBlock__header">
-      <v-rating class="commentsBlock__header-star" hover :length="5" :size="30" :model-value="3" />
-      <div class="commentsBlock__header-feedback">12 отзывов</div>
+      <h2 class="commentsBlock__header-feedback">Все отзывы: 12</h2>
     </div>
 
     <div class="commentsBlock__body">
@@ -56,14 +51,6 @@ export default defineComponent({
     height: 100px;
     display: flex;
     align-items: center;
-
-    &-star {
-      color: #F8B179;
-    }
-
-    &-feedback {
-      margin-left: 100px;
-    }
   }
 
   &__body {
@@ -91,7 +78,6 @@ export default defineComponent({
         outline: 0;
         width: 620px;
 
-
         &::placeholder {
           color: var(--main-text-color);
         }
@@ -104,6 +90,12 @@ export default defineComponent({
         display: flex;
         flex-direction: column;
 
+        &-star {
+          width: 620px;
+
+          color: #F8B179;
+        }
+
         textarea {
           width: 620px;
           border: 2px solid #F8B179;
@@ -112,7 +104,6 @@ export default defineComponent({
         }
 
         button {
-          margin-top: 20px;
           padding: 5px;
           width: 620px;
           border-radius: 5px;
@@ -122,15 +113,10 @@ export default defineComponent({
             background: var(--button-color);
             color: var(--second-color-text);
             box-shadow: 0px 0px 10px 5px rgba(248, 176, 121, 0.576);
-
-
           }
-
         }
       }
     }
-
-
   }
 }
 </style>

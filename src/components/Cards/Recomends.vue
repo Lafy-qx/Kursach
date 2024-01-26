@@ -1,6 +1,10 @@
 <template>
   <div class="recomendsBlock">
-    <Card v-for="n in 12"/>
+    <template v-for="(product, index) in productsArr" :key="index">
+      <router-link :to="`${product.id}`">
+        <Card :product="product" />
+      </router-link>
+    </template>
   </div>
 </template>
     
@@ -14,13 +18,27 @@ export default defineComponent({
   components: {
     Card
   },
+  async mounted() {
+    await this.$store.dispatch("fetchAllProducts");
+  },
+  methods: {
+    addToBasketFunc(product: any) {
+      this.$store.dispatch("addToBasket", product)
+    },
+
+  },
+  computed: {
+    productsArr(): any {
+      return this.$store.state.ProductState.allProducts
+    }
+  },
 
 });
 </script>
     
     <!-- СТИЛИ -->
 <style lang="scss" scoped>
-.recomendsBlock{
+.recomendsBlock {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;

@@ -4,12 +4,6 @@ import { defineComponent } from 'vue';
 // import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 export default defineComponent({
     name: 'Header',
-    components: {
-    },
-    data() {
-        return {
-        }
-    }
 });
 </script>
 
@@ -20,7 +14,7 @@ export default defineComponent({
             <!-- ЛОГОТИП -->
             <div class="logo">
                 <router-link to="/">
-                    <img src="assets/Header/logo.png" alt="logo" class="logo-img">
+                    <img src="/assets/Header/logo.png" alt="logo" class="logo-img">
                 </router-link>
             </div>
             <!-- БЛОК НАВИГАЦИИ -->

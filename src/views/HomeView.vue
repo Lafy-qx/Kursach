@@ -1,12 +1,24 @@
 <template>
   <div class="homeConatiner">
-    <!-- <div class="navBlock">
+    <!-- <div class="navBlock">product
       <NavHome />
     </div> -->
     <Swiper />
+    <H1>Рекомендации</H1>
     <div class="cards">
       <template v-for="(product, index) in productsArr" :key="index">
-        <Card :product="product" />          
+        <router-link :to="`DetailedCard/${product.id}`">
+          <Card :product="product" />
+        </router-link>
+
+      </template>
+    </div>
+    <H1>Хит сезона</H1>
+    <div class="cards">
+      <template v-for="(product, index) in productsArr" :key="index">
+        <router-link :to="`DetailedCard/${product.id}`">
+          <Card :product="product" />
+        </router-link>
       </template>
     </div>
 

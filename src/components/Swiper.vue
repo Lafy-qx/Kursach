@@ -50,11 +50,10 @@ export default {
 }
 
 .swiperBlock {
-    height: 780px;
-    padding: 40px 0px;
+    height: 580px;
 
     &__swiper {
-        height: 700px;
+        height: 500px;
         width: 100%;
         border-radius: 10px;
 

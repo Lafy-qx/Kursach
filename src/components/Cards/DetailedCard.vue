@@ -1,43 +1,43 @@
 <template>
     <div class="detailCardContainer">
-        <div class="infoBlock">
-            <div class="infoBlock__imgBlock">
-                <div class="infoBlock__imgBlock-img">img</div>
-                <div class="infoBlock__imgBlock-slider">Похожие</div>
-            </div>
-            <div class="infoBlock__infoItemBlock">
-                <div class="infoBlock__infoItemBlock__items">
-                    <div class="infoBlock__infoItemBlock__items__titleBlock">
-                        <p class="infoBlock__infoItemBlock__items__titleBlock-title">Название карточки</p>
+        <template v-for="(product, index) in productsArr" :key="index">
+            <template v-if="$route.params.id == product.id">
+                <div class="infoBlock">
+                    <div class="infoBlock__imgBlock">
+                        <div class="infoBlock__imgBlock-img">img</div>
+                        <div class="infoBlock__imgBlock-slider">Похожие</div>
                     </div>
-                    <div class="infoBlock__infoItemBlock__items__starsBlock">
-                        <v-rating class="infoBlock__infoItemBlock__items__starsBlock-star" readonly :length="5" :size="30"
-                            :model-value="3" />
-                        <div class="infoBlock__infoItemBlock__items__starsBlock-count">кол-во</div>
-                    </div>
-                    <div class="infoBlock__infoItemBlock__items__priceBlock">
-                        <p>200$</p>
-                        <div class="infoBlock__infoItemBlock__items__priceBlock__add">
-                            <button class="p5 infoBlock__infoItemBlock__items__priceBlock__add-minus">-</button>
-                            <p class="p5 infoBlock__infoItemBlock__items__priceBlock__add-addCounter">1</p>
-                            <button class="p5 infoBlock__infoItemBlock__items__priceBlock__add-plus">+</button>
+                    <div class="infoBlock__infoItemBlock">
+                        <div class="infoBlock__infoItemBlock__items">
+                            <div class="infoBlock__infoItemBlock__items__titleBlock">
+                                <p class="infoBlock__infoItemBlock__items__titleBlock-title">{{ product?.title }}</p>
+                            </div>
+                            <div class="infoBlock__infoItemBlock__items__starsBlock">
+                                <v-rating class="infoBlock__infoItemBlock__items__starsBlock-star" readonly :length="5"
+                                    :size="30" :model-value="3" />
+                                <div class="infoBlock__infoItemBlock__items__starsBlock-count">В наличии: {{ product?.in_stock }}</div>
+                            </div>
+                            <div class="infoBlock__infoItemBlock__items__priceBlock">
+                                <p v-if="product?.discount == 0">{{ product?.price }}₽</p>
+                                <div v-else class="lineBlock">
+                                    <p class="lineBlock-line">{{ product?.price }}</p>
+                                    <p>{{ product?.price - product?.price / 100 * product.discount }}₽</p>
+                                </div>
+
+                            </div>
+                            <div class="infoBlock__infoItemBlock__items-subtitleBlock"
+                                v-for="item in product.description.split('}{')">
+                                {{ item }}
+                            </div>
+                        </div>
+                        <div class="infoBlock__infoItemBlock__buttons">
+                            <div class="infoBlock__infoItemBlock__buttons-button">Перейти к оформлению</div>
+                            <div class="infoBlock__infoItemBlock__buttons-button">В корзину</div>
                         </div>
                     </div>
-                    <div class="infoBlock__infoItemBlock__items-subtitleBlock">
-                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus quis, magni nisi iste
-                            dolorum eum eaque autem iusto mollitia, ad inventore explicabo et nesciunt. Modi qui quam
-                            temporibus suscipit? Ex! <br>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga doloribus nihil velit consequuntur
-                            illo iste reprehenderit voluptatem eaque accusamus architecto, sequi dolorem nostrum autem
-                            veniam quasi itaque recusandae suscipit! Earum.</p>
-                    </div>
                 </div>
-                <div class="infoBlock__infoItemBlock__buttons">
-                    <div class="infoBlock__infoItemBlock__buttons-button">Перейти к оформлению</div>
-                    <div class="infoBlock__infoItemBlock__buttons-button">В корзину</div>
-                </div>
-            </div>
-        </div>
+            </template>
+        </template>
         <div class="headerDescription" v-if="visibility">
             <div class="headerDescription__togleButton active mr">Рекомендации</div>
             <div class="headerDescription__togleButton" @click="commentsCard">Комментарии</div>
@@ -49,12 +49,13 @@
         <div class="Description">
             <Recomends v-if="visibility"></Recomends>
             <Comments v-else></Comments>
-
         </div>
     </div>
 </template>
-    
+
 <script lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { defineComponent } from 'vue';
 import Comments from '@/components/Cards/Comments.vue';
 import Recomends from '@/components/Cards/Recomends.vue';
@@ -65,8 +66,14 @@ export default defineComponent({
     components: {
         Comments, Recomends
     },
-    mounted() {
+    async mounted() {
+        await this.$store.dispatch("fetchAllProducts");
         this.visibility = JSON.parse(localStorage.getItem('visibility') as string ?? this.visibility)
+    },
+    computed: {
+        productsArr(): any {
+            return this.$store.state.ProductState.allProducts
+        }
     },
     data() {
         return {
@@ -86,6 +93,12 @@ export default defineComponent({
                 localStorage.setItem('visibility', "true");
             }
         },
+    }, setup() {
+        const route = useRoute();
+        const productId = computed(() => route.params.id);
+        return {
+            productId,
+        };
     },
 
 
@@ -180,11 +193,24 @@ export default defineComponent({
             }
 
             &__priceBlock {
-                display: flex;
-                justify-content: space-between;
+                
                 padding: 10px 0px;
-                font-size: 30px;
+                font-size: 28px;
                 font-weight: 500;
+
+                .lineBlock {
+                    display: flex;
+                    align-items: center;
+                    &-line {
+                        margin-right: 10px;
+                        font-size: 26px;
+                        font-weight: 500;
+                        text-decoration: line-through;
+                        color: #2d325088;
+
+                    }
+                }
+
 
                 &__add {
                     font-size: 18px;

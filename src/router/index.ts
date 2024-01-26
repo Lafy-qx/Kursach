@@ -51,7 +51,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/DetailedCard',
+    path: '/DetailedCard/:id',
     name: 'DetailedCard',
     component: () => import('../components/Cards/DetailedCard.vue'),
     meta: {
